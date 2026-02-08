@@ -10,6 +10,9 @@ export interface GameState {
   currentLevel: number;
   score: number;
   isAnswerRevealed: boolean;
+  wrongAttempts: number;
+  hintsRevealed: number;
+  maxWrongAttempts: number;
 }
 
 export interface AudioConfig {

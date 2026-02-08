@@ -5,30 +5,32 @@ export const LEVELS: Level[] = [
   {
     id: 1,
     answer: 'Việt Nam',
-    imageCount: 3,
+    imageCount: 2,
     images: [
-      'https://source.unsplash.com/400x400/?vietnam,flag',
-      'https://source.unsplash.com/400x400/?vietnam,map',
-      'https://source.unsplash.com/400x400/?vietnam,culture',
+      'images/viet.jpeg',
+      'images/nam.jpeg',
     ],
   },
   {
     id: 2,
     answer: 'Phong trào Cần Vương',
-    imageCount: 3,
+    imageCount: 4,
     images: [
-      'https://source.unsplash.com/400x400/?emperor,vietnam',
-      'https://source.unsplash.com/400x400/?resistance,history',
-      'https://source.unsplash.com/400x400/?1885,historical',
+      'images/phong.jpeg',
+      'images/trao.png',
+      'images/can.jpg',
+      'images/vuong.jpg',
     ],
   },
   {
     id: 3,
     answer: 'Khởi nghĩa Yên Thế',
-    imageCount: 2,
+    imageCount: 4,
     images: [
-      'https://source.unsplash.com/400x400/?mountain,vietnam',
-      'https://source.unsplash.com/400x400/?historical,vietnam,leader',
+      'images/khoi.jpg',
+      'images/nghia.jpg',
+      'images/yen.jpg',
+      'images/the.jpg',
     ],
   },
   {
@@ -36,9 +38,9 @@ export const LEVELS: Level[] = [
     answer: 'Ba nước Đông Dương',
     imageCount: 3,
     images: [
-      'https://source.unsplash.com/400x400/?vietnam,map,indochina',
-      'https://source.unsplash.com/400x400/?laos,map',
-      'https://source.unsplash.com/400x400/?cambodia,map',
+      'https://via.placeholder.com/400/E3FDFD/333333?text=VN',
+      'https://via.placeholder.com/400/CBF1F5/333333?text=Lào',
+      'https://via.placeholder.com/400/A6E3E9/333333?text=KH',
     ],
   },
 ];

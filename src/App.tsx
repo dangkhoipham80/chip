@@ -3,12 +3,14 @@ import { useEffect, useState } from 'react';
 import AdminPanel from './components/AdminPanel';
 import AnswerReveal from './components/AnswerReveal';
 import GameComplete from './components/GameComplete';
+import GameOverModal from './components/GameOverModal';
 import Header from './components/Header';
 import HostControls from './components/HostControls';
 import ImageGrid from './components/ImageGrid';
 import { LEVELS } from './data';
 import { useAudio } from './hooks/useAudio';
 import { useGameState } from './hooks/useGameState';
+import { getTotalWords } from './utils/hintHelpers';
 
 function App() {
   const {
@@ -16,6 +18,7 @@ function App() {
     adminState,
     handleCorrect,
     handleWrong,
+    handleHint,
     nextLevel,
     previousLevel,
     closeAnswerReveal,
@@ -36,6 +39,10 @@ function App() {
   } = useAudio();
 
   const [shouldShake, setShouldShake] = useState(false);
+  const [gameOverModal, setGameOverModal] = useState<{
+    isVisible: boolean;
+    type: 'win' | 'lose' | 'outOfTurns';
+  }>({ isVisible: false, type: 'win' });
 
   const currentLevelData = LEVELS[gameState.currentLevel];
   const isGameComplete = gameState.currentLevel >= LEVELS.length;
@@ -54,10 +61,22 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [toggleAdmin]);
 
-  // Handle correct answer
+  // Handle correct answer with auto-advance
   const onCorrectClick = () => {
     handleCorrect();
     playSFX('correct');
+    
+    // Show success modal
+    setGameOverModal({ isVisible: true, type: 'win' });
+    
+    // Auto-advance to next level after a brief delay
+    setTimeout(() => {
+      setGameOverModal({ isVisible: false, type: 'win' });
+      if (gameState.currentLevel === LEVELS.length - 1) {
+        playSFX('levelComplete');
+      }
+      nextLevel();
+    }, 2000); // 2 second delay to show the message
   };
 
   // Handle wrong answer with shake animation
@@ -68,15 +87,41 @@ function App() {
     setTimeout(() => setShouldShake(false), 500);
   };
 
-  // Handle next level
-  const onNextClick = () => {
-    if (gameState.currentLevel === LEVELS.length - 1) {
-      playSFX('levelComplete');
-      nextLevel(); // This will trigger game complete state
-    } else {
-      nextLevel();
-    }
+  // Handle hint button
+  const onHintClick = () => {
+    handleHint();
   };
+
+  // Check for game-over conditions
+  useEffect(() => {
+    // Skip check if answer is already revealed or game is complete
+    if (gameState.isAnswerRevealed || isGameComplete) return;
+
+    const totalWords = getTotalWords(currentLevelData.answer);
+
+    // Check if all hints revealed
+    if (gameState.hintsRevealed >= totalWords && gameState.hintsRevealed > 0) {
+      console.log('[GAME OVER] All hints revealed - player loses');
+      playSFX('wrong');
+      setGameOverModal({ isVisible: true, type: 'lose' });
+      
+      setTimeout(() => {
+        setGameOverModal({ isVisible: false, type: 'lose' });
+        nextLevel();
+      }, 2500);
+    }
+    // Check if max wrong attempts reached
+    else if (gameState.wrongAttempts >= gameState.maxWrongAttempts) {
+      console.log('[GAME OVER] Max wrong attempts reached');
+      playSFX('wrong');
+      setGameOverModal({ isVisible: true, type: 'outOfTurns' });
+      
+      setTimeout(() => {
+        setGameOverModal({ isVisible: false, type: 'outOfTurns' });
+        nextLevel();
+      }, 2500);
+    }
+  }, [gameState.hintsRevealed, gameState.wrongAttempts, gameState.isAnswerRevealed, isGameComplete, currentLevelData.answer, gameState.maxWrongAttempts, nextLevel, playSFX]);
 
   // If game is complete, show completion screen
   if (isGameComplete) {
@@ -84,73 +129,63 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pastel-yellow via-pastel-pink to-pastel-blue flex flex-col">
-      <div className="max-w-7xl mx-auto w-full px-4 py-6">
-        <Header
-          score={gameState.score}
-          currentLevel={gameState.currentLevel}
-          totalLevels={LEVELS.length}
-          onToggleBGM={toggleBGM}
-          bgmEnabled={audioConfig.bgmEnabled}
-          bgmVolume={audioConfig.bgmVolume}
-          sfxVolume={audioConfig.sfxVolume}
-          onBGMVolumeChange={setBGMVolume}
-          onSFXVolumeChange={setSFXVolume}
-          onTrackChange={changeTrack}
-          currentTrack={audioConfig.currentTrack}
-        />
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-[#E8D5F2] via-[#FFD5E5] to-[#D5F5FF] flex flex-col overflow-hidden">
+      {/* Header */}
+      <Header
+        score={gameState.score}
+        currentLevel={gameState.currentLevel}
+        totalLevels={LEVELS.length}
+        onToggleBGM={toggleBGM}
+        bgmEnabled={audioConfig.bgmEnabled}
+        bgmVolume={audioConfig.bgmVolume}
+        sfxVolume={audioConfig.sfxVolume}
+        onBGMVolumeChange={setBGMVolume}
+        onSFXVolumeChange={setSFXVolume}
+        onTrackChange={changeTrack}
+        currentTrack={audioConfig.currentTrack}
+      />
 
-      {/* Main Game Area - Centered */}
-      <div className="flex-1 flex items-center justify-center px-4">
-        <div className="w-full max-w-5xl">
-          <div className="relative">
-            {/* Navigation: Previous Level Button */}
-            {gameState.currentLevel > 0 && (
-              <button
-                onClick={previousLevel}
-                className="absolute -top-16 left-0 w-14 h-14 rounded-full bg-white shadow-lg hover:shadow-xl hover:scale-110 transition-all flex items-center justify-center text-2xl z-10"
-                aria-label="Câu trước"
-              >
-                ←
-              </button>
-            )}
+      {/* Main Game Area - Full height, centered */}
+      <div className="flex-1 flex items-center justify-center py-8 px-4">
+        <div className="w-full max-w-6xl">
+          {/* Previous Level Button */}
+          {gameState.currentLevel > 0 && (
+            <button
+              onClick={previousLevel}
+              className="mb-4 w-12 h-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white hover:shadow-xl hover:scale-110 transition-all flex items-center justify-center text-2xl border-2 border-white/40"
+              aria-label="Câu trước"
+           >
+              ←
+            </button>
+          )}
 
-            {/* Main Game Board */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={gameState.currentLevel}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-2xl"
-              >
-                <ImageGrid
-                  images={currentLevelData.images}
-                  shouldShake={shouldShake}
-                />
+          {/* Game Board Card */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={gameState.currentLevel}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.4, type: 'spring' }}
+              className="bg-[#FFF8F0]/95 backdrop-blur-md rounded-3xl p-8 md:p-12 shadow-2xl border-4 border-white/50"
+            >
+              <ImageGrid
+                images={currentLevelData.images}
+                shouldShake={shouldShake}
+              />
 
-                <HostControls
-                  onCorrect={onCorrectClick}
-                  onWrong={onWrongClick}
-                  isAnswerRevealed={gameState.isAnswerRevealed}
-                />
-
-                {/* Next Level Button */}
-                <div className="flex justify-center mt-8">
-                  <button
-                    onClick={onNextClick}
-                    disabled={!gameState.isAnswerRevealed || gameState.currentLevel >= LEVELS.length}
-                    className="px-10 py-4 text-xl font-bold rounded-2xl bg-gradient-to-r from-blue-400 to-blue-600 text-white shadow-lg hover:shadow-2xl hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-                    aria-label={gameState.currentLevel === LEVELS.length - 1 ? 'Hoàn thành' : 'Tiếp theo'}
-                  >
-                    {gameState.currentLevel === LEVELS.length - 1 ? '🎉 Hoàn thành' : 'Tiếp theo →'}
-                  </button>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
+              <HostControls
+                onCorrect={onCorrectClick}
+                onWrong={onWrongClick}
+                onHint={onHintClick}
+                isAnswerRevealed={gameState.isAnswerRevealed}
+                wrongAttempts={gameState.wrongAttempts}
+                maxWrongAttempts={gameState.maxWrongAttempts}
+                hintsRevealed={gameState.hintsRevealed}
+                currentAnswer={currentLevelData.answer}
+              />
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
 
@@ -159,6 +194,13 @@ function App() {
         isVisible={gameState.isAnswerRevealed}
         answer={currentLevelData.answer}
         onClose={closeAnswerReveal}
+      />
+
+      {/* Game Over Modal */}
+      <GameOverModal
+        isVisible={gameOverModal.isVisible}
+        type={gameOverModal.type}
+        onClose={() => setGameOverModal({ ...gameOverModal, isVisible: false })}
       />
 
       {/* Admin Panel (hidden by default, Ctrl+Shift+A to toggle) */}

@@ -1,16 +1,68 @@
-@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@300;400;700&display=swap');
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  /* Pastel Sunset Gradient Background */
+  --color-pastel-lavender: #E8D5F2;
+  --color-pastel-pink: #FFD5E5;
+  --color-pastel-cyan: #D5F5FF;
+  
+  /* Legacy pastel colors */
+  --color-pastel-blue: #E5F3FF;
+  --color-pastel-yellow: #FFF9E5;
+  
+  /* Vibrant Button Colors */
+  --color-success-green: #22C55E;
+  --color-success-green-dark: #16A34A;
+  --color-error-red: #EF4444;
+  --color-error-red-dark: #DC2626;
+  --color-hint-gold: #F59E0B;
+  --color-hint-gold-dark: #D97706;
+  
+  /* Neutral Colors */
+  --color-cream: #FFF8F0;
+  --color-warm-gray: #F3F4F6;
+  
+  /* Font */
+  --font-family-main: "Nunito", system-ui, sans-serif;
+}
 
 body {
   margin: 0;
-  font-family: 'Comic Neue', cursive, system-ui;
+  font-family: var(--font-family-main);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* Custom keyframe animations */
+@keyframes shimmer {
+  0% { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.8) translateY(20px); opacity: 0; }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, 0.5); }
+  50% { box-shadow: 0 0 40px rgba(34, 197, 94, 0.8); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }

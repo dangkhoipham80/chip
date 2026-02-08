@@ -1,5 +1,4 @@
 import { useCallback, useState } from 'react';
-import { LEVELS } from '../data';
 import type { AdminState, GameState } from '../types';
 
 export const useGameState = () => {
@@ -7,6 +6,9 @@ export const useGameState = () => {
     currentLevel: 0,
     score: 0,
     isAnswerRevealed: false,
+    wrongAttempts: 0,
+    hintsRevealed: 0,
+    maxWrongAttempts: 7,
   });
 
   const [adminState, setAdminState] = useState<AdminState>({
@@ -24,20 +26,23 @@ export const useGameState = () => {
   }, []);
 
   const handleWrong = useCallback(() => {
-    console.log('[HOST ACTION] Sai clicked - Shaking images');
-    // Trigger shake animation (handled by component)
+    console.log('[HOST ACTION] Sai clicked - Shaking images and incrementing wrong attempts');
+    setGameState(prev => ({
+      ...prev,
+      wrongAttempts: prev.wrongAttempts + 1,
+    }));
   }, []);
 
   const nextLevel = useCallback(() => {
     console.log('[HOST ACTION] Next level clicked');
-    if (gameState.currentLevel < LEVELS.length - 1) {
-      setGameState(prev => ({
-        ...prev,
-        currentLevel: prev.currentLevel + 1,
-        isAnswerRevealed: false,
-      }));
-    }
-  }, [gameState.currentLevel]);
+    setGameState(prev => ({
+      ...prev,
+      currentLevel: prev.currentLevel + 1,
+      isAnswerRevealed: false,
+      wrongAttempts: 0,
+      hintsRevealed: 0,
+    }));
+  }, []);
 
   const previousLevel = useCallback(() => {
     console.log('[HOST ACTION] Previous level clicked');
@@ -46,6 +51,8 @@ export const useGameState = () => {
         ...prev,
         currentLevel: prev.currentLevel - 1,
         isAnswerRevealed: false,
+        wrongAttempts: 0,
+        hintsRevealed: 0,
       }));
     }
   }, [gameState.currentLevel]);
@@ -54,6 +61,14 @@ export const useGameState = () => {
     setGameState(prev => ({
       ...prev,
       isAnswerRevealed: false,
+    }));
+  }, []);
+
+  const handleHint = useCallback(() => {
+    console.log('[HOST ACTION] Hint clicked - Revealing next word');
+    setGameState(prev => ({
+      ...prev,
+      hintsRevealed: prev.hintsRevealed + 1,
     }));
   }, []);
 
@@ -77,6 +92,9 @@ export const useGameState = () => {
       currentLevel: 0,
       score: 0,
       isAnswerRevealed: false,
+      wrongAttempts: 0,
+      hintsRevealed: 0,
+      maxWrongAttempts: 7,
     });
   }, []);
 
@@ -93,6 +111,7 @@ export const useGameState = () => {
     adminState,
     handleCorrect,
     handleWrong,
+    handleHint,
     nextLevel,
     previousLevel,
     closeAnswerReveal,
