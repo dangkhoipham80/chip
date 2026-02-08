@@ -5,6 +5,7 @@ import AnswerReveal from './components/AnswerReveal';
 import GameComplete from './components/GameComplete';
 import GameOverModal from './components/GameOverModal';
 import Header from './components/Header';
+import HomePage from './components/HomePage';
 import HostControls from './components/HostControls';
 import ImageGrid from './components/ImageGrid';
 import { LEVELS } from './data';
@@ -41,6 +42,7 @@ function App() {
 
   const [shouldShake, setShouldShake] = useState(false);
   const [isWinning, setIsWinning] = useState(true); // Track if revealing answer from win or loss
+  const [gameStatus, setGameStatus] = useState<'home' | 'playing' | 'finished'>('home');
   const [gameOverModal, setGameOverModal] = useState<{
     isVisible: boolean;
     type: 'win' | 'lose' | 'outOfTurns';
@@ -91,10 +93,21 @@ function App() {
     handleHint();
   };
 
+  // Start game from home page
+  const startGame = () => {
+    setGameStatus('playing');
+  };
+
+  // Return to home page
+  const returnHome = () => {
+    resetGame();
+    setGameStatus('home');
+  };
+
   // Check for game-over conditions
   useEffect(() => {
     // Skip check if answer is already revealed or game is complete
-    if (gameState.isAnswerRevealed || isGameComplete) return;
+    if (gameState.isAnswerRevealed || isGameComplete || !currentLevelData) return;
 
     const totalWords = getTotalWords(currentLevelData.answer);
 
@@ -121,13 +134,26 @@ function App() {
         nextLevel();
       }, 2000);
     }
-  }, [gameState.hintsRevealed, gameState.wrongAttempts, gameState.isAnswerRevealed, isGameComplete, currentLevelData.answer, gameState.maxWrongAttempts, nextLevel, playSFX, handleCorrect, revealAnswer]);
+  }, [gameState.hintsRevealed, gameState.wrongAttempts, gameState.isAnswerRevealed, isGameComplete, currentLevelData?.answer, gameState.maxWrongAttempts, nextLevel, playSFX, handleCorrect, revealAnswer, currentLevelData]);
 
-  // If game is complete, show completion screen
-  if (isGameComplete) {
-    return <GameComplete score={gameState.score} onRestart={resetGame} />;
+  // Effect to transition to finished state when game completes
+  useEffect(() => {
+    if (isGameComplete && gameStatus === 'playing') {
+      setGameStatus('finished');
+    }
+  }, [isGameComplete, gameStatus]);
+
+  // Show home page
+  if (gameStatus === 'home') {
+    return <HomePage onStartGame={startGame} />;
   }
 
+  // Show game complete screen
+  if (gameStatus === 'finished') {
+    return <GameComplete score={gameState.score} onRestart={resetGame} onReturnHome={returnHome} />;
+  }
+
+  // Show main game (gameStatus === 'playing')
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E8D5F2] via-[#FFD5E5] to-[#D5F5FF] flex flex-col overflow-hidden">
       {/* Header */}

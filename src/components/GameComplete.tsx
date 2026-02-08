@@ -4,17 +4,18 @@ import React from 'react';
 interface GameCompleteProps {
   score: number;
   onRestart: () => void;
+  onReturnHome: () => void;
 }
 
-const GameComplete: React.FC<GameCompleteProps> = ({ score, onRestart }) => {
+const GameComplete: React.FC<GameCompleteProps> = ({ score, onRestart, onReturnHome }) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-gradient-to-br from-pastel-pink via-pastel-yellow to-pastel-blue flex items-center justify-center p-6"
+      className="min-h-screen bg-gradient-to-br from-[#E8D5F2] via-[#FFD5E5] to-[#D5F5FF] flex items-center justify-center p-6"
     >
-      <div className="bg-white rounded-3xl shadow-2xl p-12 max-w-2xl w-full text-center">
+      <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-12 max-w-2xl w-full text-center border-4 border-white/50">
         <motion.div
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -39,7 +40,7 @@ const GameComplete: React.FC<GameCompleteProps> = ({ score, onRestart }) => {
           transition={{ delay: 0.4 }}
           className="text-2xl text-gray-600 mb-8"
         >
-          Các em đã hoàn thành tất cả các câu hỏi!
+          Bạn đã hoàn thành tất cả các câu hỏi!
         </motion.p>
 
         <motion.div
@@ -53,15 +54,28 @@ const GameComplete: React.FC<GameCompleteProps> = ({ score, onRestart }) => {
           </div>
         </motion.div>
 
-        <motion.button
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          onClick={onRestart}
-          className="px-10 py-5 text-2xl font-bold rounded-xl bg-gradient-to-r from-green-400 to-blue-500 text-white shadow-lg hover:shadow-2xl hover:scale-105 active:scale-95 transition-all"
-        >
-          🔄 Chơi lại
-        </motion.button>
+        {/* Buttons */}
+        <div className="flex gap-4 justify-center flex-col sm:flex-row">
+          <motion.button
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6 }}
+            onClick={onReturnHome}
+            className="px-10 py-5 text-2xl font-bold rounded-xl bg-gradient-to-r from-purple-400 to-purple-600 text-white shadow-lg hover:shadow-2xl hover:scale-105 active:scale-95 transition-all"
+          >
+            🏠 Về trang chủ
+          </motion.button>
+
+          <motion.button
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.7 }}
+            onClick={onRestart}
+            className="px-10 py-5 text-2xl font-bold rounded-xl bg-gradient-to-r from-green-400 to-blue-500 text-white shadow-lg hover:shadow-2xl hover:scale-105 active:scale-95 transition-all"
+          >
+            🔄 Chơi lại
+          </motion.button>
+        </div>
       </div>
     </motion.div>
   );
