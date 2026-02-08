@@ -21,6 +21,7 @@ function App() {
     revealAnswer,
     handleWrong,
     handleHint,
+    handleContentHint,
     nextLevel,
     previousLevel,
     closeAnswerReveal,
@@ -251,11 +252,14 @@ function App() {
                     onCorrect={onCorrectClick}
                     onWrong={onWrongClick}
                     onHint={onHintClick}
+                    onContentHint={() => handleContentHint(currentLevelData.contentHints.length)}
                     isAnswerRevealed={gameState.isAnswerRevealed}
                     wrongAttempts={gameState.wrongAttempts}
                     maxWrongAttempts={gameState.maxWrongAttempts}
                     hintsRevealed={gameState.hintsRevealed}
+                    contentHintsRevealed={gameState.contentHintsRevealed}
                     currentAnswer={currentLevelData.answer}
+                    contentHints={currentLevelData.contentHints}
                   />
                 </div>
               </div>

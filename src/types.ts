@@ -1,9 +1,9 @@
-// Core game types
 export interface Level {
   id: number;
   answer: string;
   images: string[];
   imageCount: number;
+  contentHints: string[];
 }
 
 export interface GameState {
@@ -13,6 +13,7 @@ export interface GameState {
   wrongAttempts: number;
   hintsRevealed: number;
   maxWrongAttempts: number;
+  contentHintsRevealed: number;
 }
 
 export interface AudioConfig {

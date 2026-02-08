@@ -88,7 +88,7 @@ const HomePage: React.FC<HomePageProps> = ({ onStartGame }) => {
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-3xl">🏆</span>
-                <span>Đúng = +10 điểm</span>
+                <span>Đúng được 10 điểm</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-3xl">🎯</span>
@@ -109,15 +109,15 @@ const HomePage: React.FC<HomePageProps> = ({ onStartGame }) => {
             onClick={onStartGame}
             whileHover={{ scale: 1.05, rotate: 1 }}
             whileTap={{ scale: 0.95 }}
-            className="group relative px-24 py-8 text-5xl font-extrabold rounded-3xl bg-gradient-to-r from-green-400 via-emerald-500 to-teal-500 text-white shadow-2xl hover:shadow-green-500/50 transition-all border-8 border-white overflow-hidden"
+            className="group relative px-16 py-6 text-4xl font-extrabold rounded-2xl bg-gradient-to-r from-green-400 via-emerald-500 to-teal-500 text-white shadow-2xl hover:shadow-green-500/50 transition-all border-4 border-white overflow-hidden"
           >
             <motion.div
               animate={{ x: ['-100%', '100%'] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
               className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
             />
-            <span className="relative z-10 flex items-center gap-4">
-              <span className="text-6xl">🚀</span>
+            <span className="relative z-10 flex items-center gap-3">
+              <span className="text-5xl">🚀</span>
               BẮT ĐẦU CHƠI
             </span>
           </motion.button>

@@ -12,17 +12,17 @@ const HintDisplay: React.FC<HintDisplayProps> = ({ hint, totalWords, revealedWor
   }
 
   return (
-    <div className="mt-6 mb-4">
-      <div className="bg-gradient-to-r from-yellow-100 to-yellow-200 border-2 border-yellow-400 rounded-2xl p-6 shadow-lg">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-2xl">💡</span>
-          <span className="text-sm font-semibold text-yellow-800">
-            Gợi ý ({revealedWords}/{totalWords} từ)
-          </span>
+    <div className="w-full max-w-md">
+      <div className="bg-white/95 backdrop-blur-md border-2 border-sky-400 rounded-xl px-6 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.1)] flex items-center gap-3">
+        <span className="text-2xl animate-pulse">📝</span>
+        <div className="flex-1">
+          <p className="text-xl font-bold text-sky-900 tracking-wide text-center uppercase">
+            {hint}
+          </p>
         </div>
-        <p className="text-xl md:text-2xl font-bold text-gray-800">
-          {hint}
-        </p>
+        <span className="text-xs font-bold bg-sky-100 text-sky-700 px-2 py-1 rounded">
+          {revealedWords}/{totalWords}
+        </span>
       </div>
     </div>
   );

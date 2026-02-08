@@ -10,6 +10,11 @@ export const LEVELS: Level[] = [
       'images/viet.jpeg',
       'images/nam.jpeg',
     ],
+    contentHints: [
+      "Một quốc gia nằm ở khu vực Đông Nam Á.",
+      "Quốc gia hình chữ S, có bờ biển dài và thủ đô là Hà Nội.",
+      "Tên nước bắt đầu bằng chữ V, có quốc kỳ đỏ sao vàng."
+    ]
   },
   {
     id: 2,
@@ -21,6 +26,11 @@ export const LEVELS: Level[] = [
       'images/can.jpg',
       'images/vuong.jpg',
     ],
+    contentHints: [
+      "Một phong trào yêu nước chống Pháp vào cuối thế kỷ 19.",
+      "Phong trào hưởng ứng chiếu chỉ của một vị vua nhà Nguyễn để cứu nước.",
+      "Phong trào do vua Hàm Nghi phát động năm 1885."
+    ]
   },
   {
     id: 3,
@@ -32,6 +42,11 @@ export const LEVELS: Level[] = [
       'images/yen.jpg',
       'images/the.png',
     ],
+    contentHints: [
+      "Một cuộc khởi nghĩa nông dân lớn chống Pháp ở miền Bắc.",
+      "Cuộc khởi nghĩa kéo dài gần 30 năm do 'Hùm xám' lãnh đạo.",
+      "Cuộc khởi nghĩa vũ trang dài nhất trong lịch sử chống Pháp (1884–1913)."
+    ]
   },
   {
     id: 4,
@@ -43,6 +58,11 @@ export const LEVELS: Level[] = [
       'images/dong.png',
       'images/duong.webp',
     ],
+    contentHints: [
+      "Một nhóm quốc gia nằm trên bán đảo cùng tên ở Đông Nam Á.",
+      "Ba quốc gia từng nằm trong một liên bang thời Pháp thuộc.",
+      "Tên gọi địa lý chung cho 3 nước này trong thời kỳ thuộc địa."
+    ]
   },
 ];
 

@@ -9,6 +9,7 @@ export const useGameState = () => {
     wrongAttempts: 0,
     hintsRevealed: 0,
     maxWrongAttempts: 3,
+    contentHintsRevealed: 0,
   });
 
   const [adminState, setAdminState] = useState<AdminState>({
@@ -49,6 +50,7 @@ export const useGameState = () => {
       isAnswerRevealed: false,
       wrongAttempts: 0,
       hintsRevealed: 0,
+      contentHintsRevealed: 0,
     }));
   }, []);
 
@@ -61,6 +63,7 @@ export const useGameState = () => {
         isAnswerRevealed: false,
         wrongAttempts: 0,
         hintsRevealed: 0,
+        contentHintsRevealed: 0,
       }));
     }
   }, [gameState.currentLevel]);
@@ -73,10 +76,18 @@ export const useGameState = () => {
   }, []);
 
   const handleHint = useCallback(() => {
-    console.log('[HOST ACTION] Hint clicked - Revealing next word');
+    console.log('[HOST ACTION] Word Hint clicked - Revealing next word');
     setGameState(prev => ({
       ...prev,
       hintsRevealed: prev.hintsRevealed + 1,
+    }));
+  }, []);
+
+  const handleContentHint = useCallback((maxHints: number) => {
+    console.log('[HOST ACTION] Content Hint clicked - Revealing next content hint');
+    setGameState(prev => ({
+      ...prev,
+      contentHintsRevealed: Math.min(prev.contentHintsRevealed + 1, maxHints),
     }));
   }, []);
 
@@ -86,6 +97,9 @@ export const useGameState = () => {
       ...prev,
       currentLevel: levelIndex,
       isAnswerRevealed: false,
+      wrongAttempts: 0,
+      hintsRevealed: 0,
+      contentHintsRevealed: 0,
     }));
   }, []);
 
@@ -103,6 +117,7 @@ export const useGameState = () => {
       wrongAttempts: 0,
       hintsRevealed: 0,
       maxWrongAttempts: 3,
+      contentHintsRevealed: 0,
     });
   }, []);
 
@@ -121,6 +136,7 @@ export const useGameState = () => {
     revealAnswer,
     handleWrong,
     handleHint,
+    handleContentHint,
     nextLevel,
     previousLevel,
     closeAnswerReveal,

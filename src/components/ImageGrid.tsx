@@ -73,7 +73,7 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, shouldShake }) => {
               </div>
 
               {/* Image Container - Responsive fluidity to avoid scroll */}
-              <div className="w-40 h-40 sm:w-56 sm:h-56 lg:w-64 lg:h-64 xl:w-72 xl:h-72 bg-gray-100 rounded-md overflow-hidden border-2 border-gray-100">
+              <div className="w-48 h-56 sm:w-64 sm:h-64 lg:w-72 lg:h-72 xl:w-80 xl:h-80 bg-white rounded-md overflow-hidden border-2 border-gray-100">
                 {imageErrors[image] ? (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-200 to-pink-200 text-5xl">
                     🖼️
@@ -82,7 +82,7 @@ const ImageGrid: React.FC<ImageGridProps> = ({ images, shouldShake }) => {
                   <img
                     src={image}
                     alt={`Gợi ý ${index + 1}`}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                     onError={() => handleImageError(image)}
                     loading="lazy"
                   />

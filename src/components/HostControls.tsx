@@ -7,27 +7,34 @@ interface HostControlsProps {
   onCorrect: () => void;
   onWrong: () => void;
   onHint: () => void;
+  onContentHint: () => void;
   isAnswerRevealed: boolean;
   wrongAttempts: number;
   maxWrongAttempts: number;
   hintsRevealed: number;
+  contentHintsRevealed: number;
   currentAnswer: string;
+  contentHints: string[];
 }
 
 const HostControls: React.FC<HostControlsProps> = ({
   onCorrect,
   onWrong,
   onHint,
+  onContentHint,
   isAnswerRevealed,
   wrongAttempts,
   maxWrongAttempts,
   hintsRevealed,
+  contentHintsRevealed,
   currentAnswer,
+  contentHints = [],
 }) => {
   const totalWords = getTotalWords(currentAnswer);
   const hintText = getProgressiveHint(currentAnswer, hintsRevealed);
   const isWrongLimitReached = wrongAttempts >= maxWrongAttempts;
   const allHintsRevealed = hintsRevealed >= totalWords;
+  const allContentHintsRevealed = contentHintsRevealed >= contentHints.length;
 
   // Render hearts for lives with animation - Smaller Scale
   const renderHearts = () => {
@@ -63,41 +70,52 @@ const HostControls: React.FC<HostControlsProps> = ({
   };
 
   return (
-    <div>
+    <div className="w-full flex flex-col items-center">
+      {/* Content Hints Display Area */}
+      <div className="w-full max-w-4xl px-4 min-h-[60px] mb-2 flex flex-col gap-2 items-center justify-end">
+         {contentHints.slice(0, contentHintsRevealed).map((hint, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-yellow-100/90 backdrop-blur-sm border-l-4 border-yellow-500 text-yellow-900 px-4 py-2 rounded shadow-sm text-lg font-medium text-center w-full shadow-lg"
+            >
+              💡 Gợi ý {index + 1}: {hint}
+            </motion.div>
+         ))}
+      </div>
+
       {/* Hearts/Lives Display - More Compact */}
-      <div className="flex justify-center mb-6">
-        <div className="bg-gradient-to-r from-pink-50 to-red-50 backdrop-blur-sm px-10 py-3 rounded-2xl shadow-xl border-4 border-white flex gap-2 items-center">
+      <div className="flex justify-center mb-2">
+        <div className="bg-gradient-to-r from-pink-50 to-red-50 backdrop-blur-sm px-10 py-2 rounded-2xl shadow-lg border-2 border-white flex gap-2 items-center">
           {renderHearts()}
         </div>
       </div>
 
-      {/* Hint Display */}
-      <HintDisplay 
-        hint={hintText} 
-        totalWords={totalWords} 
-        revealedWords={hintsRevealed} 
-      />
+      {/* Hint Display (Word Hint) - Fixed Height Container for Stability */}
+      <div className="relative h-20 w-full flex justify-center items-center mb-2 z-20 pointer-events-none">
+        <div className="absolute w-full flex justify-center pointer-events-auto">
+          <HintDisplay 
+            hint={hintText} 
+            totalWords={totalWords} 
+            revealedWords={hintsRevealed} 
+          />
+        </div>
+      </div>
 
-      {/* Chunky Control Buttons - Scaled Down but still chunky */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-center items-stretch mt-8 px-4 max-w-4xl mx-auto">
+      {/* Chunky Control Buttons - Refined & Premium */}
+      <div className="flex flex-col md:flex-row gap-3 justify-center items-center mt-2 px-4 max-w-6xl mx-auto w-full z-10">
         {/* ĐÚNG Button */}
         <motion.button
           onClick={onCorrect}
           disabled={isAnswerRevealed}
-          whileHover={!isAnswerRevealed ? { scale: 1.05, rotate: 1 } : {}}
-          whileTap={!isAnswerRevealed ? { scale: 0.95 } : {}}
-          className="flex-1 min-h-[70px] px-8 py-4 text-2xl font-extrabold rounded-2xl bg-gradient-to-br from-[#22C55E] to-[#16A34A] text-white shadow-xl hover:shadow-green-400/60 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed border-4 border-white/40 relative overflow-hidden group"
+          whileHover={!isAnswerRevealed ? { scale: 1.03, y: -2 } : {}}
+          whileTap={!isAnswerRevealed ? { scale: 0.97, y: 0 } : {}}
+          className="flex-1 w-full md:w-auto h-[60px] px-6 rounded-xl bg-gradient-to-b from-green-400 to-green-600 text-white shadow-[0_4px_0_rgb(21,128,61)] hover:shadow-[0_6px_0_rgb(21,128,61)] active:shadow-none transition-all disabled:opacity-50 disabled:shadow-none disabled:translate-y-1 relative overflow-hidden group border-2 border-green-300/30"
           aria-label="Đáp án đúng"
         >
-          {!isAnswerRevealed && (
-            <motion.div
-              animate={{ x: ['-200%', '200%'] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"
-            />
-          )}
-          <span className="relative z-10 flex items-center justify-center gap-2">
-            <span className="text-3xl">✓</span>
+          <span className="relative z-10 flex items-center justify-center gap-2 font-black text-lg sm:text-xl tracking-wide uppercase">
+            <span className="text-2xl">✓</span>
             <span>ĐÚNG</span>
           </span>
         </motion.button>
@@ -106,55 +124,53 @@ const HostControls: React.FC<HostControlsProps> = ({
         <motion.button
           onClick={onWrong}
           disabled={isAnswerRevealed || isWrongLimitReached}
-          whileHover={!isAnswerRevealed && !isWrongLimitReached ? { scale: 1.05, rotate: -1 } : {}}
-          whileTap={!isAnswerRevealed && !isWrongLimitReached ? { scale: 0.95 } : {}}
-          className="flex-1 min-h-[70px] px-8 py-4 text-2xl font-extrabold rounded-2xl bg-gradient-to-br from-[#EF4444] to-[#DC2626] text-white shadow-xl hover:shadow-red-400/60 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed border-4 border-white/40 relative overflow-hidden group"
+          whileHover={!isAnswerRevealed && !isWrongLimitReached ? { scale: 1.03, y: -2 } : {}}
+          whileTap={!isAnswerRevealed && !isWrongLimitReached ? { scale: 0.97, y: 0 } : {}}
+          className="flex-1 w-full md:w-auto h-[60px] px-6 rounded-xl bg-gradient-to-b from-red-400 to-red-600 text-white shadow-[0_4px_0_rgb(185,28,28)] hover:shadow-[0_6px_0_rgb(185,28,28)] active:shadow-none transition-all disabled:opacity-50 disabled:shadow-none disabled:translate-y-1 relative overflow-hidden group border-2 border-red-300/30"
           aria-label="Đáp án sai"
         >
-          {!isAnswerRevealed && !isWrongLimitReached && (
-            <motion.div
-              animate={{ x: ['-200%', '200%'] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: 'linear', delay: 0.5 }}
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"
-            />
-          )}
-          <span className="relative z-10 flex items-center justify-center gap-2">
-            <span className="text-3xl">✗</span>
+          <span className="relative z-10 flex items-center justify-center gap-2 font-black text-lg sm:text-xl tracking-wide uppercase">
+            <span className="text-2xl">✗</span>
             <span>SAI</span>
           </span>
         </motion.button>
 
-        {/* GỢI Ý Button */}
+        {/* CONTENT HINT Button (Yellow) */}
+        <motion.button
+          onClick={onContentHint}
+          disabled={isAnswerRevealed || allContentHintsRevealed}
+          whileHover={!isAnswerRevealed && !allContentHintsRevealed ? { scale: 1.03, y: -2 } : {}}
+          whileTap={!isAnswerRevealed && !allContentHintsRevealed ? { scale: 0.97, y: 0 } : {}}
+          className="flex-1 w-full md:w-auto h-[60px] px-4 rounded-xl bg-gradient-to-b from-amber-400 to-amber-600 text-white shadow-[0_4px_0_rgb(180,83,9)] hover:shadow-[0_6px_0_rgb(180,83,9)] active:shadow-none transition-all disabled:opacity-50 disabled:shadow-none disabled:translate-y-1 relative overflow-hidden group border-2 border-amber-300/30"
+          aria-label="Gợi ý nội dung"
+        >
+          <span className="relative z-10 flex items-center justify-center gap-2 font-black text-lg sm:text-xl tracking-wide">
+            <span className="text-2xl">💡</span>
+            <span className="uppercase">GỢI Ý NỘI DUNG</span>
+            <span className="bg-black/20 px-2 py-0.5 rounded text-sm min-w-[3.5rem] text-center ml-1">
+              {contentHintsRevealed}/{contentHints.length}
+            </span>
+          </span>
+        </motion.button>
+
+        {/* WORD HINT Button (Blue) */}
         <motion.button
           onClick={onHint}
           disabled={isAnswerRevealed || allHintsRevealed}
-          whileHover={!isAnswerRevealed && !allHintsRevealed ? { scale: 1.05, rotate: 1 } : {}}
-          whileTap={!isAnswerRevealed && !allHintsRevealed ? { scale: 0.95 } : {}}
-          className="flex-1 min-h-[70px] px-8 py-4 text-2xl font-extrabold rounded-2xl bg-gradient-to-br from-[#F59E0B] to-[#D97706] text-white shadow-xl hover:shadow-yellow-400/60 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed border-4 border-white/40 relative overflow-hidden group"
-          aria-label="Gợi ý"
+          whileHover={!isAnswerRevealed && !allHintsRevealed ? { scale: 1.03, y: -2 } : {}}
+          whileTap={!isAnswerRevealed && !allHintsRevealed ? { scale: 0.97, y: 0 } : {}}
+          className="flex-1 w-full md:w-auto h-[60px] px-4 rounded-xl bg-gradient-to-b from-sky-400 to-sky-600 text-white shadow-[0_4px_0_rgb(3,105,161)] hover:shadow-[0_6px_0_rgb(3,105,161)] active:shadow-none transition-all disabled:opacity-50 disabled:shadow-none disabled:translate-y-1 relative overflow-hidden group border-2 border-sky-300/30"
+          aria-label="Gợi ý từ"
         >
-          {!allHintsRevealed && !isAnswerRevealed && (
-            <motion.div
-              animate={{ x: ['-200%', '200%'] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: 'linear', delay: 1 }}
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"
-            />
-          )}
-          <span className="relative z-10 flex items-center justify-center gap-2">
-            <motion.span 
-              animate={{ rotate: [0, -10, 10, 0] }}
-              transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
-              className="text-3xl inline-block"
-            >
-              💡
-            </motion.span>
-            <span>GỢI Ý</span>
+          <span className="relative z-10 flex items-center justify-center gap-2 font-black text-lg sm:text-xl tracking-wide">
+            <span className="text-2xl">🔤</span>
+            <span className="uppercase">GỢI Ý TỪ</span>
+            {!allHintsRevealed && !isAnswerRevealed && (
+               <span className="bg-black/20 px-2 py-0.5 rounded text-sm min-w-[3.5rem] text-center ml-1">
+                {hintsRevealed}/{totalWords}
+               </span>
+            )}
           </span>
-          {!allHintsRevealed && !isAnswerRevealed && (
-            <span className="absolute top-2 right-2 text-xs bg-white/40 px-2 py-1 rounded-full font-bold">
-              {hintsRevealed}/{totalWords}
-            </span>
-          )}
         </motion.button>
       </div>
     </div>
