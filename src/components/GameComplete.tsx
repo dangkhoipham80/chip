@@ -47,7 +47,7 @@ const GameComplete: React.FC<GameCompleteProps> = ({ score, onReturnHome }) => {
         ))}
       </div>
 
-      <div className="relative z-10 w-full max-w-6xl text-center">
+      <div className="relative z-10 w-full max-w-6xl text-center px-4">
         {/* Giant Trophy */}
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
@@ -60,7 +60,7 @@ const GameComplete: React.FC<GameCompleteProps> = ({ score, onReturnHome }) => {
           }}
           className="mb-8"
         >
-          <div className="text-[200px] leading-none">🏆</div>
+          <div className="text-8xl md:text-[200px] leading-none">🏆</div>
         </motion.div>
 
         {/* Congratulations Text */}
@@ -68,7 +68,7 @@ const GameComplete: React.FC<GameCompleteProps> = ({ score, onReturnHome }) => {
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.4 }}
-          className="text-8xl font-extrabold text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text mb-6 drop-shadow-2xl leading-tight py-2"
+          className="text-5xl md:text-8xl font-extrabold text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-600 bg-clip-text mb-6 drop-shadow-2xl leading-tight py-2"
         >
           XUẤT SẮC!
         </motion.h1>
@@ -77,7 +77,7 @@ const GameComplete: React.FC<GameCompleteProps> = ({ score, onReturnHome }) => {
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="text-4xl text-gray-700 font-bold mb-12"
+          className="text-2xl md:text-4xl text-gray-700 font-bold mb-8 md:mb-12"
         >
           Bạn đã hoàn thành tất cả các câu hỏi!
         </motion.p>
@@ -92,19 +92,19 @@ const GameComplete: React.FC<GameCompleteProps> = ({ score, onReturnHome }) => {
             damping: 10,
             delay: 0.6 
           }}
-          className="mb-16"
+          className="mb-12 md:mb-16"
         >
-          <div className="inline-block bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 rounded-[50px] p-3 shadow-2xl">
-            <div className="bg-white/95 rounded-[40px] px-20 py-12">
-              <div className="text-gray-500 text-3xl font-bold mb-2">TỔNG ĐIỂM</div>
+          <div className="inline-block bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 rounded-[30px] md:rounded-[50px] p-2 md:p-3 shadow-2xl">
+            <div className="bg-white/95 rounded-[25px] md:rounded-[40px] px-10 py-8 md:px-20 md:py-12">
+              <div className="text-gray-500 text-xl md:text-3xl font-bold mb-2">TỔNG ĐIỂM</div>
               <motion.div
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 1, repeat: Infinity }}
-                className="text-[120px] font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent leading-none"
+                className="text-6xl md:text-[120px] font-extrabold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent leading-none"
               >
                 {score}
               </motion.div>
-              <div className="text-gray-500 text-3xl font-bold mt-2">điểm</div>
+              <div className="text-gray-500 text-xl md:text-3xl font-bold mt-2">điểm</div>
             </div>
           </div>
         </motion.div>
@@ -120,10 +120,10 @@ const GameComplete: React.FC<GameCompleteProps> = ({ score, onReturnHome }) => {
             onClick={onReturnHome}
             whileHover={{ scale: 1.05, rotate: -1 }}
             whileTap={{ scale: 0.95 }}
-            className="px-12 py-6 text-3xl font-extrabold rounded-3xl bg-gradient-to-r from-purple-500 to-purple-700 text-white shadow-2xl hover:shadow-purple-500/50 transition-all border-6 border-white/50"
+            className="px-8 py-4 md:px-12 md:py-6 text-xl md:text-3xl font-extrabold rounded-3xl bg-gradient-to-r from-purple-500 to-purple-700 text-white shadow-2xl hover:shadow-purple-500/50 transition-all border-4 md:border-6 border-white/50"
           >
             <span className="flex items-center gap-3">
-              <span className="text-4xl">🏠</span>
+              <span className="text-2xl md:text-4xl">🏠</span>
               Về trang chủ
             </span>
           </motion.button>
