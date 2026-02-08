@@ -32,7 +32,7 @@ const GameOverModal: React.FC<GameOverModalProps> = ({ isVisible, type, onClose 
         return {
           emoji: '❌',
           title: 'Bạn đã hết lượt chơi',
-          message: 'Đã sai 7 lần',
+          message: 'Đã sai 3 lần',
           bgGradient: 'from-red-400 to-red-600',
         };
     }

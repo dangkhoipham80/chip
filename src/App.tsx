@@ -155,7 +155,47 @@ function App() {
 
   // Show main game (gameStatus === 'playing')
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#E8D5F2] via-[#FFD5E5] to-[#D5F5FF] flex flex-col overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#E8D5F2] via-[#FFD5E5] to-[#D5F5FF] flex flex-col overflow-hidden relative">
+      {/* Animated Background Particles */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        {[...Array(15)].map((_, i) => (
+          <motion.div
+            key={i}
+            initial={{ 
+              x: Math.random() * window.innerWidth,
+              y: Math.random() * window.innerHeight,
+              scale: 0
+            }}
+            animate={{
+              x: [
+                Math.random() * window.innerWidth,
+                Math.random() * window.innerWidth,
+                Math.random() * window.innerWidth
+              ],
+              y: [
+                Math.random() * window.innerHeight,
+                Math.random() * window.innerHeight,
+                Math.random() * window.innerHeight
+              ],
+              scale: [0, 1, 0],
+              opacity: [0, 0.6, 0]
+            }}
+            transition={{
+              duration: Math.random() * 10 + 10,
+              repeat: Infinity,
+              delay: Math.random() * 5
+            }}
+            className={`absolute rounded-full blur-xl ${
+              i % 3 === 0 ? 'bg-purple-300' : i % 3 === 1 ? 'bg-pink-300' : 'bg-cyan-300'
+            }`}
+            style={{
+              width: Math.random() * 100 + 50,
+              height: Math.random() * 100 + 50
+            }}
+          />
+        ))}
+      </div>
+
       {/* Header */}
       <Header
         score={gameState.score}
@@ -171,48 +211,60 @@ function App() {
         currentTrack={audioConfig.currentTrack}
       />
 
-      {/* Main Game Area - Full height, centered */}
-      <div className="flex-1 flex items-center justify-center py-8 px-4">
-        <div className="w-full max-w-6xl">
-          {/* Previous Level Button */}
+      {/* Main Game Area - Expanded to Full Screen */}
+      <div className="flex-1 flex flex-col items-center justify-between py-6 px-4 relative z-10 w-full">
+        {/* Top Controls / Navigation Layer */}
+        <div className="w-full flex justify-start items-start px-4 sm:px-8">
+          {/* Previous Level Button - More elegant positioning */}
           {gameState.currentLevel > 0 && (
-            <button
+            <motion.button
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
               onClick={previousLevel}
-              className="mb-4 w-12 h-12 rounded-full bg-white/80 backdrop-blur-sm shadow-lg hover:bg-white hover:shadow-xl hover:scale-110 transition-all flex items-center justify-center text-2xl border-2 border-white/40"
+              className="w-14 h-14 rounded-full bg-white/40 backdrop-blur-md shadow-lg hover:bg-white/60 hover:scale-110 transition-all flex items-center justify-center text-3xl border-2 border-white/20 text-gray-700"
               aria-label="Câu trước"
-           >
+            >
               ←
-            </button>
+            </motion.button>
           )}
+        </div>
 
-          {/* Game Board Card */}
+        {/* Game Content Spotlight */}
+        <div className="w-full flex-1 flex flex-col items-center justify-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={gameState.currentLevel}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.4, type: 'spring' }}
-              className="bg-[#FFF8F0]/95 backdrop-blur-md rounded-3xl p-8 md:p-12 shadow-2xl border-4 border-white/50"
+              initial={{ opacity: 0, scale: 0.9, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: -30 }}
+              transition={{ duration: 0.6, type: 'spring', stiffness: 80 }}
+              className="w-full h-full flex flex-col items-center justify-center"
             >
-              <ImageGrid
-                images={currentLevelData.images}
-                shouldShake={shouldShake}
-              />
+              <div className="w-full max-w-[90vw] mx-auto">
+                <ImageGrid
+                  images={currentLevelData.images}
+                  shouldShake={shouldShake}
+                />
 
-              <HostControls
-                onCorrect={onCorrectClick}
-                onWrong={onWrongClick}
-                onHint={onHintClick}
-                isAnswerRevealed={gameState.isAnswerRevealed}
-                wrongAttempts={gameState.wrongAttempts}
-                maxWrongAttempts={gameState.maxWrongAttempts}
-                hintsRevealed={gameState.hintsRevealed}
-                currentAnswer={currentLevelData.answer}
-              />
+                <div className="mt-4">
+                  <HostControls
+                    onCorrect={onCorrectClick}
+                    onWrong={onWrongClick}
+                    onHint={onHintClick}
+                    isAnswerRevealed={gameState.isAnswerRevealed}
+                    wrongAttempts={gameState.wrongAttempts}
+                    maxWrongAttempts={gameState.maxWrongAttempts}
+                    hintsRevealed={gameState.hintsRevealed}
+                    currentAnswer={currentLevelData.answer}
+                  />
+                </div>
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>
+
+        {/* Bottom Padding for balance */}
+        <div className="h-4" />
       </div>
 
       {/* Answer Reveal Modal - Hide when GameOver modal is showing */}

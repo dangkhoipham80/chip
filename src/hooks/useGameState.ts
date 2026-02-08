@@ -8,7 +8,7 @@ export const useGameState = () => {
     isAnswerRevealed: false,
     wrongAttempts: 0,
     hintsRevealed: 0,
-    maxWrongAttempts: 7,
+    maxWrongAttempts: 3,
   });
 
   const [adminState, setAdminState] = useState<AdminState>({
@@ -102,7 +102,7 @@ export const useGameState = () => {
       isAnswerRevealed: false,
       wrongAttempts: 0,
       hintsRevealed: 0,
-      maxWrongAttempts: 7,
+      maxWrongAttempts: 3,
     });
   }, []);
 
