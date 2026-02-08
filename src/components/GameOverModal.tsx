@@ -26,7 +26,7 @@ const GameOverModal: React.FC<GameOverModalProps> = ({ isVisible, type, onClose 
         return {
           emoji: '😢',
           image: '/images/goi-y-tu.png',
-          title: 'Bạn đã thua',
+          title: 'Gợi ý mà xài hao vậy ba?',
           message: 'Đã dùng hết gợi ý từ',
           bgGradient: 'from-orange-400 to-orange-600',
         };

@@ -35,6 +35,7 @@ function App() {
   const {
     audioConfig,
     toggleBGM,
+    playBGM,
     playSFX,
     setBGMVolume,
     setSFXVolume,
@@ -65,6 +66,23 @@ function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [toggleAdmin]);
+
+  // Attempt to play BGM on first user interaction (for "Auto-play" feel)
+  useEffect(() => {
+    const handleInteraction = () => {
+      if (audioConfig.bgmEnabled) {
+        playBGM();
+      }
+    };
+
+    window.addEventListener('click', handleInteraction, { once: true });
+    window.addEventListener('keydown', handleInteraction, { once: true });
+
+    return () => {
+      window.removeEventListener('click', handleInteraction);
+      window.removeEventListener('keydown', handleInteraction);
+    };
+  }, [audioConfig.bgmEnabled, playBGM]);
 
   // Handle correct answer with auto-advance
   const onCorrectClick = () => {
@@ -97,6 +115,7 @@ function App() {
   // Start game from home page
   const startGame = () => {
     setGameStatus('playing');
+    playBGM(); // Start music on user interaction
   };
 
   // Return to home page
@@ -115,7 +134,7 @@ function App() {
     // Check if all hints revealed
     if (gameState.hintsRevealed >= totalWords && gameState.hintsRevealed > 0) {
       console.log('[GAME OVER] All hints revealed - player loses');
-      playSFX('wrong');
+      playSFX('outOfHints');
       setGameOverModal({ isVisible: true, type: 'lose' });
       
       setTimeout(() => {

@@ -67,7 +67,7 @@ const AnswerReveal: React.FC<AnswerRevealProps> = ({ isVisible, answer, onClose,
 
             <div className="flex-1 flex flex-col justify-center items-center w-full">
               <h2 id="answer-title" className={`text-3xl font-extrabold mb-1 tracking-tight ${showPoints ? 'text-green-600' : 'text-slate-800'}`}>
-                {showPoints ? 'Chính xác!' : 'Bạn đã thua'}
+                {showPoints ? 'Chính xác! Bạn rùa phết :3' : 'Bạn đã thua! Có vậy cũng không đoán được?'}
               </h2>
               
               <p className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">

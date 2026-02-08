@@ -76,5 +76,6 @@ export const AUDIO_TRACKS = {
     correct: '/audio/correct-ding.mp3', // TODO: Add cheerful ding sound
     wrong: '/audio/wrong-buzz.mp3', // TODO: Add soft buzz sound
     levelComplete: '/audio/level-complete.mp3', // TODO: Add victory jingle
+    outOfHints: '/audio/out-of-hints.mp3', // TODO: Add sound for running out of hints
   },
 };
