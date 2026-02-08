@@ -24,45 +24,77 @@ const AnswerReveal: React.FC<AnswerRevealProps> = ({ isVisible, answer, onClose,
           aria-labelledby="answer-title"
         >
           <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className={`p-12 rounded-3xl shadow-2xl max-w-3xl mx-4 ${
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className={`rounded-3xl shadow-2xl overflow-hidden relative w-[520px] min-h-[360px] flex flex-col items-center justify-center p-8 text-center ${
               showPoints 
-                ? 'bg-gradient-to-br from-yellow-200 via-green-200 to-blue-200' 
-                : 'bg-gradient-to-br from-orange-200 via-red-200 to-pink-200'
+                ? 'bg-gradient-to-br from-green-50 to-emerald-100 border-4 border-white' 
+                : 'bg-gradient-to-br from-gray-50 to-slate-100 border-4 border-white'
             }`}
             onClick={(e) => e.stopPropagation()}
+            style={{ boxShadow: '0 20px 50px -12px rgba(0, 0, 0, 0.25)' }}
           >
-            <div className="text-center">
-              <motion.div
-                initial={{ y: -20 }}
-                animate={{ y: 0 }}
-                className="text-7xl mb-6"
-              >
-                {showPoints ? '🎉' : '😢'}
-              </motion.div>
-              <h2 id="answer-title" className="text-5xl font-bold text-gray-800 mb-4">
-                {showPoints ? 'Đáp án' : 'Bạn đã thua'}
+            {/* Icon */}
+            {!showPoints && (
+              <div className="mb-6">
+                <img 
+                  src="/images/x.png" 
+                  alt="Lose Icon" 
+                  className="w-28 h-28 object-contain drop-shadow-md mx-auto"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.parentElement!.innerHTML = '<span class="text-7xl">❌</span>';
+                  }}
+                />
+              </div>
+            )}
+
+            {showPoints && (
+              <div className="mb-6">
+                <img 
+                  src="/images/correct.png" 
+                  alt="Win Icon" 
+                  className="w-28 h-28 object-contain drop-shadow-md mx-auto"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                    e.currentTarget.parentElement!.innerHTML = '<span class="text-7xl">🎉</span>';
+                  }}
+                />
+              </div>
+            )}
+
+            <div className="flex-1 flex flex-col justify-center items-center w-full">
+              <h2 id="answer-title" className={`text-3xl font-extrabold mb-1 tracking-tight ${showPoints ? 'text-green-600' : 'text-slate-800'}`}>
+                {showPoints ? 'Chính xác!' : 'Bạn đã thua'}
               </h2>
-              <p className="text-4xl text-gray-600 mb-4">Đáp án đúng là:</p>
-              <motion.p
-                initial={{ scale: 0.9 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2 }}
-                className="text-6xl font-bold text-purple-700"
-              >
-                {answer}
-              </motion.p>
+              
+              <p className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">
+                {showPoints ? 'Đáp án là:' : 'Đáp án đúng là:'}
+              </p>
+
+              <div className="w-full px-4">
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.1 }}
+                  className="bg-white/50 rounded-xl py-3 px-2 w-full backdrop-blur-sm shadow-inner"
+                >
+                  <p className={`text-2xl sm:text-3xl font-black break-words leading-tight ${showPoints ? 'text-green-600' : 'text-red-500'}`}>
+                    {answer}
+                  </p>
+                </motion.div>
+              </div>
+
               {showPoints && (
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                  className="mt-8"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="mt-4 bg-yellow-100/80 text-yellow-700 px-4 py-1 rounded-full text-sm font-bold shadow-sm"
                 >
-                  <div className="text-4xl">✨ +10 điểm ✨</div>
+                  ✨ +10 điểm ✨
                 </motion.div>
               )}
             </div>

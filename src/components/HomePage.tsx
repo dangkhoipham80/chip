@@ -92,7 +92,7 @@ const HomePage: React.FC<HomePageProps> = ({ onStartGame }) => {
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-3xl">🎯</span>
-                <span>4 câu hỏi thú vị</span>
+                <span>Dùng hết gợi ý từ/mạng sẽ thua</span>
               </li>
             </ul>
           </div>
