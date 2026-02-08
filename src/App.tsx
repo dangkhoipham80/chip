@@ -17,6 +17,7 @@ function App() {
     gameState,
     adminState,
     handleCorrect,
+    revealAnswer,
     handleWrong,
     handleHint,
     nextLevel,
@@ -39,6 +40,7 @@ function App() {
   } = useAudio();
 
   const [shouldShake, setShouldShake] = useState(false);
+  const [isWinning, setIsWinning] = useState(true); // Track if revealing answer from win or loss
   const [gameOverModal, setGameOverModal] = useState<{
     isVisible: boolean;
     type: 'win' | 'lose' | 'outOfTurns';
@@ -63,20 +65,17 @@ function App() {
 
   // Handle correct answer with auto-advance
   const onCorrectClick = () => {
-    handleCorrect();
+    setIsWinning(true); // Winning = show points
+    handleCorrect(); // This reveals the answer
     playSFX('correct');
     
-    // Show success modal
-    setGameOverModal({ isVisible: true, type: 'win' });
-    
-    // Auto-advance to next level after a brief delay
+    // Wait 2 seconds to show answer, then advance
     setTimeout(() => {
-      setGameOverModal({ isVisible: false, type: 'win' });
       if (gameState.currentLevel === LEVELS.length - 1) {
         playSFX('levelComplete');
       }
       nextLevel();
-    }, 2000); // 2 second delay to show the message
+    }, 2000);
   };
 
   // Handle wrong answer with shake animation
@@ -114,14 +113,15 @@ function App() {
     else if (gameState.wrongAttempts >= gameState.maxWrongAttempts) {
       console.log('[GAME OVER] Max wrong attempts reached');
       playSFX('wrong');
-      setGameOverModal({ isVisible: true, type: 'outOfTurns' });
+      setIsWinning(false); // Losing = don't show points
+      revealAnswer(); // Reveal the answer WITHOUT adding points
       
+      // Wait 2 seconds to show answer, then advance
       setTimeout(() => {
-        setGameOverModal({ isVisible: false, type: 'outOfTurns' });
         nextLevel();
-      }, 2500);
+      }, 2000);
     }
-  }, [gameState.hintsRevealed, gameState.wrongAttempts, gameState.isAnswerRevealed, isGameComplete, currentLevelData.answer, gameState.maxWrongAttempts, nextLevel, playSFX]);
+  }, [gameState.hintsRevealed, gameState.wrongAttempts, gameState.isAnswerRevealed, isGameComplete, currentLevelData.answer, gameState.maxWrongAttempts, nextLevel, playSFX, handleCorrect, revealAnswer]);
 
   // If game is complete, show completion screen
   if (isGameComplete) {
@@ -189,11 +189,12 @@ function App() {
         </div>
       </div>
 
-      {/* Answer Reveal Modal */}
+      {/* Answer Reveal Modal - Hide when GameOver modal is showing */}
       <AnswerReveal
-        isVisible={gameState.isAnswerRevealed}
+        isVisible={gameState.isAnswerRevealed && !gameOverModal.isVisible}
         answer={currentLevelData.answer}
         onClose={closeAnswerReveal}
+        showPoints={isWinning}
       />
 
       {/* Game Over Modal */}

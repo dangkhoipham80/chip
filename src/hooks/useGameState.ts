@@ -25,6 +25,14 @@ export const useGameState = () => {
     }));
   }, []);
 
+  const revealAnswer = useCallback(() => {
+    console.log('[GAME OVER] Revealing answer without points');
+    setGameState(prev => ({
+      ...prev,
+      isAnswerRevealed: true,
+    }));
+  }, []);
+
   const handleWrong = useCallback(() => {
     console.log('[HOST ACTION] Sai clicked - Shaking images and incrementing wrong attempts');
     setGameState(prev => ({
@@ -110,6 +118,7 @@ export const useGameState = () => {
     gameState,
     adminState,
     handleCorrect,
+    revealAnswer,
     handleWrong,
     handleHint,
     nextLevel,

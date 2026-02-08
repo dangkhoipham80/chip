@@ -36,11 +36,12 @@ export const LEVELS: Level[] = [
   {
     id: 4,
     answer: 'Ba nước Đông Dương',
-    imageCount: 3,
+    imageCount: 4,
     images: [
-      'https://via.placeholder.com/400/E3FDFD/333333?text=VN',
-      'https://via.placeholder.com/400/CBF1F5/333333?text=Lào',
-      'https://via.placeholder.com/400/A6E3E9/333333?text=KH',
+      'images/3.jpg',
+      'images/nuoc.jpeg',
+      'images/dong.png',
+      'images/duong.webp',
     ],
   },
 ];

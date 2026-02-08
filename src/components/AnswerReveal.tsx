@@ -5,9 +5,10 @@ interface AnswerRevealProps {
   isVisible: boolean;
   answer: string;
   onClose: () => void;
+  showPoints?: boolean; // Whether to show +10 points
 }
 
-const AnswerReveal: React.FC<AnswerRevealProps> = ({ isVisible, answer, onClose }) => {
+const AnswerReveal: React.FC<AnswerRevealProps> = ({ isVisible, answer, onClose, showPoints = true }) => {
   return (
     <AnimatePresence>
       {isVisible && (
@@ -27,7 +28,11 @@ const AnswerReveal: React.FC<AnswerRevealProps> = ({ isVisible, answer, onClose 
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
-            className="bg-gradient-to-br from-yellow-200 via-green-200 to-blue-200 p-12 rounded-3xl shadow-2xl max-w-3xl mx-4"
+            className={`p-12 rounded-3xl shadow-2xl max-w-3xl mx-4 ${
+              showPoints 
+                ? 'bg-gradient-to-br from-yellow-200 via-green-200 to-blue-200' 
+                : 'bg-gradient-to-br from-orange-200 via-red-200 to-pink-200'
+            }`}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="text-center">
@@ -36,11 +41,12 @@ const AnswerReveal: React.FC<AnswerRevealProps> = ({ isVisible, answer, onClose 
                 animate={{ y: 0 }}
                 className="text-7xl mb-6"
               >
-                🎉
+                {showPoints ? '🎉' : '😢'}
               </motion.div>
               <h2 id="answer-title" className="text-5xl font-bold text-gray-800 mb-4">
-                Đáp án
+                {showPoints ? 'Đáp án' : 'Bạn đã thua'}
               </h2>
+              <p className="text-4xl text-gray-600 mb-4">Đáp án đúng là:</p>
               <motion.p
                 initial={{ scale: 0.9 }}
                 animate={{ scale: 1 }}
@@ -49,14 +55,16 @@ const AnswerReveal: React.FC<AnswerRevealProps> = ({ isVisible, answer, onClose 
               >
                 {answer}
               </motion.p>
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="mt-8"
-              >
-                <div className="text-4xl">✨ +10 điểm ✨</div>
-              </motion.div>
+              {showPoints && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="mt-8"
+                >
+                  <div className="text-4xl">✨ +10 điểm ✨</div>
+                </motion.div>
+              )}
             </div>
           </motion.div>
         </motion.div>
