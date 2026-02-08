@@ -67,7 +67,7 @@ body {
   50% { transform: translateY(-10px); }
 }
 
-/* Force 80% zoom */
+/* Scale everything down to 80% using REM scaling */
 html {
-  zoom: 0.8;
+  font-size: 80%;
 }
