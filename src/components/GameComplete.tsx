@@ -7,7 +7,7 @@ interface GameCompleteProps {
   onReturnHome: () => void;
 }
 
-const GameComplete: React.FC<GameCompleteProps> = ({ score, onRestart, onReturnHome }) => {
+const GameComplete: React.FC<GameCompleteProps> = ({ score, onReturnHome }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#E8D5F2] via-[#FFD5E5] to-[#D5F5FF] flex items-center justify-center p-4 relative overflow-hidden">
       {/* Animated background elements */}
