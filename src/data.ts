@@ -30,7 +30,7 @@ export const LEVELS: Level[] = [
       'images/khoi.jpg',
       'images/nghia.jpg',
       'images/yen.jpg',
-      'images/the.jpg',
+      'images/the.png',
     ],
   },
   {

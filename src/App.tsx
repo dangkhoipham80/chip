@@ -149,7 +149,7 @@ function App() {
   }
 
   // Show game complete screen
-  if (gameStatus === 'finished') {
+  if (gameStatus === 'finished' || !currentLevelData) {
     return <GameComplete score={gameState.score} onRestart={resetGame} onReturnHome={returnHome} />;
   }
 
