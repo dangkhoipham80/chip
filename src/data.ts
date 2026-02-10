@@ -58,9 +58,9 @@ export const LEVELS: Level[] = [
       'images/phap-kieu.webp',
     ],
     contentHints: [
-      "Một nhóm quốc gia nằm trên bán đảo cùng tên ở Đông Nam Á.",
-      "Ba quốc gia từng nằm trong một liên bang thời Pháp thuộc.",
-      "Tên gọi địa lý chung cho 3 nước này trong thời kỳ thuộc địa."
+      "Việt Nam mất chủ quyền, trở thành thuộc địa của một thế lực xâm lược.",
+      "Thế lực này lập bộ máy cai trị để đàn áp nhân dân.",
+      "Chính quyền phong kiến bị khống chế, trở thành công cụ của kẻ đô hộ."
     ]
   },
 ];
