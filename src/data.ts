@@ -50,13 +50,12 @@ export const LEVELS: Level[] = [
   },
   {
     id: 4,
-    answer: 'Ba nước Đông Dương',
-    imageCount: 4,
+    answer: 'Thực dân Pháp',
+    imageCount: 3,
     images: [
-      'images/3.jpg',
-      'images/nuoc.jpeg',
-      'images/dong.png',
-      'images/duong.webp',
+      'images/nguyet-thuc.jpg',
+      'images/nhan-dan.png',
+      'images/phap-kieu.webp',
     ],
     contentHints: [
       "Một nhóm quốc gia nằm trên bán đảo cùng tên ở Đông Nam Á.",
